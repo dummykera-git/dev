@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f6ff">
+  <meta name="description" content="COREBIQ — Intelligent Business Management">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <title>COREBIQ · Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="dashboard.html" aria-label="COREBIQ home">
+        <img src="assets/logo.png" alt="COREBIQ logo" class="brand-logo" onerror="this.style.display='none'">
+        <img src="assets/name.png" alt="COREBIQ" class="brand-name" onerror="this.style.display='none'">
+        <span class="brand-fallback">COREBIQ</span>
+      </a>
+      <button class="sidebar-collapse icon-button" id="sidebarToggle" aria-label="Collapse sidebar"><i data-lucide="panel-left-close"></i></button>
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="side-nav" id="sideNav" aria-label="Main navigation"></nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-promo">
+          <div class="promo-orb"><i data-lucide="sparkles"></i></div>
+          <p class="promo-title">Make every decision count.</p>
+          <p class="promo-copy">Your business, connected and intelligent.</p>
+          <a href="biq-ai.html" class="promo-link">Explore BIQ AI <i data-lucide="arrow-up-right"></i></a>
+        </div>
+        <div class="sidebar-foot"><span class="status-dot"></span><span>All systems operational</span><span class="version">v1.0</span></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" id="mobileMenu" aria-label="Open menu"><i data-lucide="menu"></i></button>
+        <div class="mobile-brand">
+          <img src="assets/logo.png" alt="" onerror="this.style.display='none'">
+          <img src="assets/name.png" alt="COREBIQ" onerror="this.style.display='none'">
+          <span>COREBIQ</span>
+        </div>
+        <label class="searchbox">
+          <i data-lucide="search"></i>
+          <input id="globalSearch" type="search" placeholder="Search anything..." aria-label="Search modules">
+          <kbd>⌘ K</kbd>
+        </label>
+        <div class="topbar-actions">
+          <button class="icon-button" id="themeToggle" aria-label="Toggle theme"><i data-lucide="sun"></i></button>
+          <button class="icon-button notification-button" aria-label="Notifications" data-link="notification.html"><i data-lucide="bell"></i><span class="notification-dot"></span></button>
+          <button class="profile-button" aria-label="User profile">
+            <span class="avatar">MS</span><span class="profile-copy"><b>Mohammed Shanid</b><small>Administrator</small></span><i data-lucide="chevron-down"></i>
+          </button>
+        </div>
+      </header>
+
+      <section class="content" id="mainContent">
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-dot"></span> BUSINESS OVERVIEW</div>
+            <h1 id="greeting">Good evening, <span>Mohammed Shanid.</span></h1>
+            <p class="page-subtitle">Here’s what’s happening across your business today.</p>
+          </div>
+          <button class="date-filter"><i data-lucide="calendar-days"></i><span>This month</span><i data-lucide="chevron-down"></i></button>
+        </div>
+
+        <section class="hero-card">
+          <div class="hero-content">
+            <div class="hero-kicker"><span class="hero-spark"><i data-lucide="sparkles"></i></span> INTELLIGENT BUSINESS MANAGEMENT</div>
+            <h2>Turn your data<br>into <span>better decisions.</span></h2>
+            <p>One connected workspace for your customers, operations and performance.</p>
+            <div class="hero-actions"><a href="report.html" class="button-primary">View business insights <i data-lucide="arrow-up-right"></i></a><a href="biq-ai.html" class="button-ghost">Meet BIQ AI <i data-lucide="sparkles"></i></a></div>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="art-glow"></div><div class="art-ring ring-one"></div><div class="art-ring ring-two"></div>
+            <div class="art-cube cube-back"><i data-lucide="chart-no-axes-combined"></i></div>
+            <div class="art-cube cube-front"><i data-lucide="layers-3"></i></div>
+            <div class="floating-chip chip-top"><i data-lucide="trending-up"></i><span><b>+18.6%</b><small>Growth</small></span></div>
+            <div class="floating-chip chip-bottom"><i data-lucide="shield-check"></i><span><b>All in sync</b><small>Business data</small></span></div>
+          </div>
+          <div class="hero-decor decor-a"></div><div class="hero-decor decor-b"></div>
+        </section>
+
+        <div class="section-heading"><div><h2>At a glance</h2><p>Your business performance, simplified.</p></div><a href="report.html" class="text-link">Full report <i data-lucide="arrow-up-right"></i></a></div>
+        <section class="stats-grid">
+          <article class="stat-card stat-revenue"><div class="stat-top"><span class="stat-icon"><i data-lucide="wallet"></i></span><span class="stat-trend positive"><i data-lucide="trending-up"></i> 12.8%</span></div><p class="stat-label">Total revenue</p><div class="stat-value">₹12,48,560</div><p class="stat-foot">Compared with last month</p><div class="sparkline spark-blue"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></article>
+          <article class="stat-card stat-clients"><div class="stat-top"><span class="stat-icon"><i data-lucide="users"></i></span><span class="stat-trend positive"><i data-lucide="trending-up"></i> 8.2%</span></div><p class="stat-label">Active clients</p><div class="stat-value">184</div><p class="stat-foot">12 new this month</p><div class="sparkline spark-violet"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></article>
+          <article class="stat-card stat-invoices"><div class="stat-top"><span class="stat-icon"><i data-lucide="receipt-text"></i></span><span class="stat-trend negative"><i data-lucide="trending-down"></i> 4.1%</span></div><p class="stat-label">Pending invoices</p><div class="stat-value">28</div><p class="stat-foot">₹2,16,400 outstanding</p><div class="sparkline spark-orange"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></article>
+          <article class="stat-card stat-compliance"><div class="stat-top"><span class="stat-icon"><i data-lucide="calendar-check"></i></span><span class="stat-trend attention"><i data-lucide="circle-alert"></i> Action needed</span></div><p class="stat-label">Compliance due</p><div class="stat-value">16</div><p class="stat-foot">Next 7 days</p><div class="sparkline spark-pink"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></article>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="panel revenue-panel">
+            <div class="panel-heading"><div><h2>Revenue overview</h2><p>Income and expenses over time</p></div><button class="select-button">Last 6 months <i data-lucide="chevron-down"></i></button></div>
+            <div class="chart-legend"><span><i class="legend-dot revenue-dot"></i>Revenue</span><span><i class="legend-dot expense-dot"></i>Expenses</span></div>
+            <div class="chart-wrap">
+              <div class="chart-y-labels"><span>₹15L</span><span>₹10L</span><span>₹5L</span><span>₹0</span></div>
+              <div class="chart-area">
+                <div class="chart-gridlines"><span></span><span></span><span></span><span></span></div>
+                <div class="bars">
+                  <div class="bar-group"><div class="bar revenue-bar" style="height:45%"></div><div class="bar expense-bar" style="height:27%"></div><small>May</small></div>
+                  <div class="bar-group"><div class="bar revenue-bar" style="height:62%"></div><div class="bar expense-bar" style="height:39%"></div><small>Jun</small></div>
+                  <div class="bar-group"><div class="bar revenue-bar" style="height:52%"></div><div class="bar expense-bar" style="height:34%"></div><small>Jul</small></div>
+                  <div class="bar-group"><div class="bar revenue-bar" style="height:76%"></div><div class="bar expense-bar" style="height:46%"></div><small>Aug</small></div>
+                  <div class="bar-group"><div class="bar revenue-bar" style="height:70%"></div><div class="bar expense-bar" style="height:51%"></div><small>Sep</small></div>
+                  <div class="bar-group"><div class="bar revenue-bar" style="height:91%"></div><div class="bar expense-bar" style="height:63%"></div><small>Oct</small></div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel quick-panel">
+            <div class="panel-heading"><div><h2>Quick actions</h2><p>Jump straight into your workflow</p></div><button class="more-button" aria-label="More quick actions" data-link="tools.html"><i data-lucide="ellipsis"></i></button></div>
+            <div class="quick-grid">
+              <a href="crm.html" class="quick-action qa-blue"><span><i data-lucide="user-round-plus"></i></span><b>Add client</b><small>CRM</small></a>
+              <a href="accounts.html" class="quick-action qa-green"><span><i data-lucide="file-plus-2"></i></span><b>Create invoice</b><small>Accounts</small></a>
+              <a href="gst.html" class="quick-action qa-orange"><span><i data-lucide="file-check-2"></i></span><b>File GST</b><small>Compliance</small></a>
+              <a href="inventory.html" class="quick-action qa-pink"><span><i data-lucide="package-plus"></i></span><b>Add item</b><small>Inventory</small></a>
+              <a href="employees.html" class="quick-action qa-violet"><span><i data-lucide="user-round-plus"></i></span><b>New employee</b><small>People</small></a>
+              <a href="biq-ai.html" class="quick-action qa-cyan"><span><i data-lucide="sparkles"></i></span><b>Ask BIQ AI</b><small>Intelligence</small></a>
+            </div>
+          </article>
+
+          <article class="panel activity-panel">
+            <div class="panel-heading"><div><h2>Recent activity</h2><p>Latest updates from your workspace</p></div><a href="notification.html" class="text-link">View all <i data-lucide="arrow-up-right"></i></a></div>
+            <div class="activity-list">
+              <div class="activity-row"><span class="activity-icon act-green"><i data-lucide="user-round-plus"></i></span><div class="activity-copy"><b>New client added</b><small>ABC Traders · CRM</small></div><time>2 min ago</time></div>
+              <div class="activity-row"><span class="activity-icon act-blue"><i data-lucide="file-text"></i></span><div class="activity-copy"><b>Invoice created</b><small>INV-000123 · Accounts</small></div><time>28 min ago</time></div>
+              <div class="activity-row"><span class="activity-icon act-orange"><i data-lucide="file-check"></i></span><div class="activity-copy"><b>GST return filed</b><small>September 2026 · GST</small></div><time>1 hr ago</time></div>
+              <div class="activity-row"><span class="activity-icon act-violet"><i data-lucide="user-check"></i></span><div class="activity-copy"><b>Employee profile updated</b><small>Team directory · Employees</small></div><time>3 hrs ago</time></div>
+            </div>
+          </article>
+
+          <article class="panel compliance-panel">
+            <div class="panel-heading"><div><h2>Upcoming reminders</h2><p>Stay ahead of important dates</p></div><a href="gst.html" class="text-link">View all <i data-lucide="arrow-up-right"></i></a></div>
+            <div class="reminder-list">
+              <a href="gst.html" class="reminder-row"><span class="reminder-icon reminder-red"><i data-lucide="calendar-clock"></i></span><span class="reminder-copy"><b>GSTR-3B return</b><small>September 2026 · GST</small></span><span class="reminder-date"><b>20 Oct</b><small class="due-red">Due soon</small></span></a>
+              <a href="gst.html" class="reminder-row"><span class="reminder-icon reminder-orange"><i data-lucide="file-clock"></i></span><span class="reminder-copy"><b>TDS return · Q2</b><small>Tax deduction filing</small></span><span class="reminder-date"><b>31 Oct</b><small>11 days left</small></span></a>
+              <a href="employees.html" class="reminder-row"><span class="reminder-icon reminder-violet"><i data-lucide="users"></i></span><span class="reminder-copy"><b>Payroll processing</b><small>Monthly payroll</small></span><span class="reminder-date"><b>31 Oct</b><small>11 days left</small></span></a>
+              <a href="report.html" class="reminder-row"><span class="reminder-icon reminder-blue"><i data-lucide="clipboard-check"></i></span><span class="reminder-copy"><b>Monthly review</b><small>Management report</small></span><span class="reminder-date"><b>02 Nov</b><small>14 days left</small></span></a>
+            </div>
+          </article>
+        </section>
+        <footer class="page-footer"><span>© 2026 COREBIQ</span><span>Building intelligent businesses <i data-lucide="heart"></i></span><a href="about-app.html">About COREBIQ</a></footer>
+      </section>
+    </main>
+  </div>
+
+  <nav class="bottom-nav" id="bottomNav" aria-label="Mobile navigation"></nav>
+  <div class="mobile-scrim" id="mobileScrim"></div>
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script><script>if ("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(console.warn));</script>
+  <script>if (window.lucide) lucide.createIcons();</script>
+</body>
+</html>
