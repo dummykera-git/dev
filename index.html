@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Premium CRM & ERP Dashboard</title>
+    
+    <!-- PWA & Favicon Meta Tags -->
+    <meta name="theme-color" content="#FDFBFF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="icon" href="logo.png" type="image/png" onerror="this.href='https://placehold.co/128x128/6750A4/white?text=L'">
+    <link rel="apple-touch-icon" href="logo.png">
+
+    <!-- Google Fonts & Material Symbols -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+
+    <!-- Tailwind CSS & Chart.js -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Tailwind Configuration for M3 & Gemini Theme -->
+    <script>
+        tailwind.config = {
+            darkMode: 'media',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        m3: {
+                            primary: '#6750A4',
+                            onPrimary: '#FFFFFF',
+                            primaryContainer: '#EADDFF',
+                            onPrimaryContainer: '#21005D',
+                            secondary: '#625B71',
+                            surface: '#FDFBFF',
+                            surfaceContainer: '#F3EDF7',
+                            surfaceContainerHigh: '#ECE6F0',
+                            onSurface: '#1C1B1F',
+                            onSurfaceVariant: '#49454F',
+                            outline: '#79747E',
+                            geminiBlue: '#4285F4',
+                            geminiPurple: '#9b72cb',
+                            geminiPink: '#d96570'
+                        }
+                    },
+                    boxShadow: {
+                        'm3-elevation-1': '0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15)',
+                        'm3-elevation-2': '0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FDFBFF;
+            color: #1C1B1F;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Material Symbols Active Fill */
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Gemini Gradient Text & Backgrounds */
+        .text-gradient-gemini {
+            background: linear-gradient(90deg, #4285F4 0%, #9b72cb 50%, #d96570 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .bg-gradient-gemini {
+            background: linear-gradient(135deg, #4285F4 0%, #9b72cb 50%, #d96570 100%);
+        }
+
+        /* Module Card Hover Effect */
+        .module-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .module-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Safe area padding for mobile bottom nav */
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+    </style>
+</head>
+<body class="flex flex-col h-screen overflow-hidden selection:bg-m3-primaryContainer selection:text-m3-onPrimaryContainer">
+
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
+
+    <!-- Splash Screen -->
+    <div id="splash-screen" class="fixed inset-0 z-[100] bg-m3-surface flex flex-col items-center justify-center transition-opacity duration-700 ease-in-out">
+        <div class="flex flex-col items-center animate-pulse">
+            <img src="logo.png" alt="App Logo" class="w-24 h-24 mb-4 rounded-[2rem] shadow-m3-elevation-2 object-cover" onerror="this.src='https://placehold.co/200x200/6750A4/white?text=Logo'">
+            <img src="name.png" alt="App Name" class="h-8 object-contain" onerror="this.src='https://placehold.co/300x80/transparent/6750A4?text=BIQ+AI+Enterprise'">
+        </div>
+        <div class="absolute bottom-12 flex space-x-2">
+            <div class="w-2 h-2 rounded-full bg-m3-geminiBlue animate-bounce" style="animation-delay: 0s;"></div>
+            <div class="w-2 h-2 rounded-full bg-m3-geminiPurple animate-bounce" style="animation-delay: 0.2s;"></div>
+            <div class="w-2 h-2 rounded-full bg-m3-geminiPink animate-bounce" style="animation-delay: 0.4s;"></div>
+        </div>
+    </div>
+
+    <!-- Sticky Header (Strictly NO Hamburger Menu) -->
+    <header class="fixed top-0 w-full h-16 bg-m3-surface/90 backdrop-blur-md z-40 border-b border-m3-surfaceContainerHigh flex items-center justify-between px-4 lg:px-6">
+        <div class="flex items-center gap-3">
+            <img src="logo.png" alt="Logo" class="w-10 h-10 rounded-xl object-cover shadow-sm" onerror="this.src='https://placehold.co/100x100/6750A4/white?text=L'">
+            <img src="name.png" alt="Brand Name" class="h-6 object-contain" onerror="this.src='https://placehold.co/200x60/transparent/6750A4?text=Premium+CRM'">
+        </div>
+        <div class="flex items-center gap-3">
+            <button class="relative p-2 text-m3-onSurfaceVariant hover:bg-m3-surfaceContainerHigh rounded-full transition-colors">
+                <span class="material-symbols-rounded">notifications</span>
+                <span class="absolute top-2 right-2 w-2.5 h-2.5 bg-m3-geminiPink border-2 border-m3-surface rounded-full"></span>
+            </button>
+            <div class="w-9 h-9 rounded-full bg-gradient-gemini text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                AD
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer Overlay (Hidden on Desktop) -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-m3-onSurface/40 z-40 hidden md:hidden opacity-0 transition-opacity duration-300" onclick="toggleSidebar()"></div>
+
+    <!-- Main Layout Container -->
+    <div class="flex flex-1 mt-16 overflow-hidden relative">
+        
+        <!-- Sidebar (Persistent on Desktop, Off-canvas on Mobile) -->
+        <!-- z-50 to ensure it slides over the header on mobile -->
+        <aside id="sidebar" class="fixed md:static inset-y-0 left-0 z-50 w-72 bg-m3-surfaceContainer transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out border-r border-m3-surfaceContainerHigh flex flex-col h-full shadow-2xl md:shadow-none pb-safe">
+            
+            <!-- Mobile Sidebar Header (Hidden on Desktop) -->
+            <div class="flex items-center justify-between p-4 md:hidden border-b border-m3-surfaceContainerHigh">
+                <div class="flex items-center gap-2">
+                    <img src="logo.png" alt="Logo" class="w-8 h-8 rounded-lg" onerror="this.src='https://placehold.co/100x100/6750A4/white?text=L'">
+                    <span class="font-bold text-m3-onSurface">Modules</span>
+                </div>
+                <button onclick="toggleSidebar()" class="p-2 text-m3-onSurfaceVariant hover:bg-m3-surfaceContainerHigh rounded-full">
+                    <span class="material-symbols-rounded">close</span>
+                </button>
+            </div>
+
+            <!-- Sidebar Navigation -->
+            <nav id="sidebar-nav" class="flex-1 overflow-y-auto no-scrollbar p-3 flex flex-col gap-1 md:pt-4">
+                <!-- Navigation items dynamically injected by JS -->
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto bg-m3-surface p-4 md:p-8 pb-28 md:pb-8">
+            <div class="max-w-7xl mx-auto">
+                
+                <!-- Premium Welcome Banner -->
+                <div class="mb-8 bg-m3-surfaceContainer rounded-[2rem] border border-m3-surfaceContainerHigh p-6 md:p-8 relative overflow-hidden shadow-sm">
+                    <!-- Decorative Background Gradients -->
+                    <div class="absolute -top-32 -right-32 w-96 h-96 bg-gradient-to-br from-m3-geminiBlue/20 via-m3-geminiPurple/20 to-m3-geminiPink/20 rounded-full blur-3xl"></div>
+                    <div class="absolute -bottom-10 -left-10 w-48 h-48 bg-m3-geminiBlue/10 rounded-full blur-2xl"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/50 backdrop-blur-sm rounded-full border border-white/40 text-xs font-semibold text-m3-primary mb-4 shadow-sm">
+                            <span class="material-symbols-rounded text-[16px] text-gradient-gemini">auto_awesome</span>
+                            BIQ AI Active
+                        </div>
+                        <h1 class="text-3xl md:text-5xl font-bold mb-3 tracking-tight text-m3-onSurface">
+                            Welcome back, <span class="text-gradient-gemini">Admin</span>
+                        </h1>
+                        <p class="text-m3-onSurfaceVariant mb-8 max-w-2xl text-sm md:text-base leading-relaxed">
+                            Your enterprise ecosystem is fully synced. Revenue is up 12% this week, and 3 inventory items require your attention.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-4">
+                            <button class="bg-gradient-gemini text-white px-7 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 flex items-center gap-2">
+                                Generate Report
+                                <span class="material-symbols-rounded text-[20px]">arrow_forward</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2-in-a-row Mini KPI Cards (Attendance) -->
+                <div class="grid grid-cols-2 gap-4 md:gap-6 mb-8">
+                    <div class="module-card bg-m3-surface border border-m3-surfaceContainerHigh rounded-[1.5rem] p-4 md:p-5 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs md:text-sm font-medium text-m3-onSurfaceVariant mb-1">Present Today</p>
+                            <p class="text-xl md:text-3xl font-bold text-m3-onSurface">42 <span class="text-xs md:text-sm font-normal text-m3-onSurfaceVariant">/ 45</span></p>
+                        </div>
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-green-50 text-green-600 rounded-xl md:rounded-2xl flex items-center justify-center">
+                            <span class="material-symbols-rounded icon-filled">how_to_reg</span>
+                        </div>
+                    </div>
+                    <div class="module-card bg-m3-surface border border-m3-surfaceContainerHigh rounded-[1.5rem] p-4 md:p-5 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs md:text-sm font-medium text-m3-onSurfaceVariant mb-1">On Leave</p>
+                            <p class="text-xl md:text-3xl font-bold text-m3-onSurface">3 <span class="text-xs md:text-sm font-normal text-red-500">-2 from yest.</span></p>
+                        </div>
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-red-50 text-red-500 rounded-xl md:rounded-2xl flex items-center justify-center">
+                            <span class="material-symbols-rounded icon-filled">person_off</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Grid: Chart & Activity -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    
+                    <!-- Sales Chart (Line Format) -->
+                    <div class="lg:col-span-2 module-card bg-m3-surface border border-m3-surfaceContainerHigh rounded-[1.5rem] p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-m3-onSurface">Sales Overview</h3>
+                            <select class="bg-m3-surfaceContainer border border-m3-surfaceContainerHigh text-sm rounded-lg px-3 py-1.5 outline-none text-m3-onSurface font-medium">
+                                <option>This Week</option>
+                                <option>This Month</option>
+                                <option>This Year</option>
+                            </select>
+                        </div>
+                        <div class="relative w-full h-64 md:h-72">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity with TRN I -->
+                    <div class="module-card bg-m3-surface border border-m3-surfaceContainerHigh rounded-[1.5rem] p-5 flex flex-col h-full">
+                        <h3 class="text-lg font-bold text-m3-onSurface mb-4">Recent Activity</h3>
+                        <div class="flex-1 overflow-y-auto no-scrollbar space-y-5">
+                            
+                            <!-- Activity Item 1 -->
+                            <div class="flex gap-3">
+                                <div class="mt-0.5 w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                                    <span class="material-symbols-rounded text-[16px]">receipt_long</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-m3-onSurface">Payment Received</p>
+                                    <p class="text-xs font-semibold text-m3-primary mt-0.5">TRN I-4920</p>
+                                    <p class="text-[10px] text-m3-outline mt-1">2 mins ago</p>
+                                </div>
+                            </div>
+
+                            <!-- Activity Item 2 -->
+                            <div class="flex gap-3">
+                                <div class="mt-0.5 w-8 h-8 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0">
+                                    <span class="material-symbols-rounded text-[16px]">inventory_2</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-m3-onSurface">Stock Updated</p>
+                                    <p class="text-xs font-semibold text-m3-primary mt-0.5">TRN I-4919</p>
+                                    <p class="text-[10px] text-m3-outline mt-1">1 hour ago</p>
+                                </div>
+                            </div>
+
+                            <!-- Activity Item 3 -->
+                            <div class="flex gap-3">
+                                <div class="mt-0.5 w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center flex-shrink-0">
+                                    <span class="material-symbols-rounded text-[16px]">person_add</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-m3-onSurface">New Client Boarded</p>
+                                    <p class="text-xs font-semibold text-m3-primary mt-0.5">TRN I-4918</p>
+                                    <p class="text-[10px] text-m3-outline mt-1">3 hours ago</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Activity Item 4 -->
+                            <div class="flex gap-3">
+                                <div class="mt-0.5 w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0">
+                                    <span class="material-symbols-rounded text-[16px]">warning</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-m3-onSurface">GST Filing Overdue</p>
+                                    <p class="text-xs font-semibold text-m3-primary mt-0.5">TRN I-4917</p>
+                                    <p class="text-[10px] text-m3-outline mt-1">Yesterday</p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <button class="w-full mt-4 py-2 text-sm font-bold text-m3-primary hover:bg-m3-primaryContainer/50 rounded-xl transition-colors">
+                            View All Activity
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile Bottom Navigation (Hidden on Desktop) -->
+    <!-- The Menu icon here is what triggers the off-canvas sidebar -->
+    <nav class="md:hidden fixed bottom-0 w-full h-[80px] bg-m3-surfaceContainer border-t border-m3-surfaceContainerHigh z-30 pb-safe shadow-[0_-4px_16px_rgba(0,0,0,0.05)]">
+        <ul id="mobile-bottom-nav" class="flex h-full items-center justify-around px-2">
+            <!-- Bottom nav items injected by JS -->
+        </ul>
+    </nav>
+
+    <!-- Scripts -->
+    <script>
+        // Full list of 17 Modules
+        const modules = [
+            { name: 'Dashboard', icon: 'dashboard' },
+            { name: 'CRM', icon: 'contacts' },
+            { name: 'Accounts', icon: 'account_balance' },
+            { name: 'Employees', icon: 'badge' },
+            { name: 'GST', icon: 'receipt_long' },
+            { name: 'Inventory', icon: 'inventory_2' },
+            { name: 'Settings', icon: 'settings' },
+            { name: 'Data', icon: 'database' },
+            { name: 'Tools', icon: 'build' },
+            { name: 'Report', icon: 'bar_chart' },
+            { name: 'Notification', icon: 'notifications' },
+            { name: 'Users', icon: 'group' },
+            { name: 'About app', icon: 'info' },
+            { name: 'Templates', icon: 'dashboard_customize' },
+            { name: 'BIQ AI', icon: 'auto_awesome', isAi: true },
+            { name: 'Payment Gateway', icon: 'payments' },
+            { name: 'More', icon: 'more_horiz' }
+        ];
+
+        const currentPage = 'Dashboard';
+
+        // Helper: Convert "Payment Gateway" to "payment-gateway.html"
+        function createLink(name) {
+            return name.toLowerCase().replace(/\s+/g, '-') + '.html';
+        }
+
+        // Render Sidebar Navigation
+        const sidebarNav = document.getElementById('sidebar-nav');
+        modules.forEach(mod => {
+            const isActive = mod.name === currentPage;
+            const link = createLink(mod.name);
+            
+            const baseClasses = `flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-0.5 transition-colors group`;
+            const activeClasses = isActive 
+                ? `bg-m3-primaryContainer text-m3-onPrimaryContainer font-bold` 
+                : `text-m3-onSurfaceVariant hover:bg-m3-surfaceContainerHigh hover:text-m3-onSurface font-medium`;
+            
+            const iconClass = isActive ? `icon-filled` : ``;
+            const aiIconStyle = mod.isAi ? 'text-gradient-gemini' : '';
+
+            sidebarNav.innerHTML += `
+                <a href="${link}" class="${baseClasses} ${activeClasses}">
+                    <span class="material-symbols-rounded text-[24px] ${iconClass} ${aiIconStyle}">${mod.icon}</span>
+                    <span class="text-[14px] tracking-wide">${mod.name}</span>
+                </a>
+            `;
+        });
+
+        // Render Mobile Bottom Navigation (4 Core Items + Menu Toggle)
+        const bottomNavItems = [
+            { name: 'Dashboard', icon: 'dashboard', link: createLink('Dashboard') },
+            { name: 'CRM', icon: 'contacts', link: createLink('CRM') },
+            { name: 'BIQ AI', icon: 'auto_awesome', link: createLink('BIQ AI'), isAi: true },
+            { name: 'Menu', icon: 'menu', isAction: true } // Menu item controls sidebar
+        ];
+
+        const mobileNav = document.getElementById('mobile-bottom-nav');
+        bottomNavItems.forEach(item => {
+            const isActive = item.name === currentPage;
+            const pillClasses = isActive ? `bg-m3-primaryContainer text-m3-onPrimaryContainer` : `text-m3-onSurfaceVariant`;
+            const iconClass = isActive ? `icon-filled` : ``;
+            const textClasses = isActive ? `text-m3-onSurface font-bold` : `text-m3-onSurfaceVariant font-medium`;
+            const aiIconStyle = item.isAi && !isActive ? 'text-gradient-gemini' : '';
+
+            const innerHTML = `
+                <div class="w-16 h-8 rounded-full flex items-center justify-center mb-1 transition-colors ${pillClasses}">
+                    <span class="material-symbols-rounded text-[24px] ${iconClass} ${aiIconStyle}">${item.icon}</span>
+                </div>
+                <span class="text-[11px] leading-tight text-center ${textClasses}">${item.name}</span>
+            `;
+
+            if (item.isAction) {
+                // Menu Button triggers sidebar
+                mobileNav.innerHTML += `
+                    <li class="flex-1 flex justify-center">
+                        <button onclick="toggleSidebar()" class="flex flex-col items-center w-full py-2 outline-none">
+                            ${innerHTML}
+                        </button>
+                    </li>
+                `;
+            } else {
+                // Standard Links
+                mobileNav.innerHTML += `
+                    <li class="flex-1 flex justify-center">
+                        <a href="${item.link}" class="flex flex-col items-center w-full py-2">
+                            ${innerHTML}
+                        </a>
+                    </li>
+                `;
+            }
+        });
+
+        // Sidebar Toggle Logic for Mobile
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('mobile-overlay');
+        let isSidebarOpen = false;
+
+        function toggleSidebar() {
+            isSidebarOpen = !isSidebarOpen;
+            if (isSidebarOpen) {
+                // Open Sidebar
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                // Small delay to allow display:block to apply before animating opacity
+                setTimeout(() => { overlay.classList.remove('opacity-0'); }, 10); 
+            } else {
+                // Close Sidebar
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0');
+                // Wait for transition before hiding
+                setTimeout(() => { overlay.classList.add('hidden'); }, 300);
+            }
+        }
+
+        // Splash Screen Removal Logic
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                splash.classList.add('opacity-0');
+                setTimeout(() => { splash.style.display = 'none'; }, 700);
+            }, 1200);
+
+            // Initialize Sales Line Chart
+            const ctx = document.getElementById('salesChart');
+            if (ctx) {
+                const chartCtx = ctx.getContext('2d');
+                
+                // Create Gemini style gradient for the chart area
+                const gradient = chartCtx.createLinearGradient(0, 0, 0, 300);
+                gradient.addColorStop(0, 'rgba(66, 133, 244, 0.25)'); // Gemini Blue light
+                gradient.addColorStop(1, 'rgba(66, 133, 244, 0)');
+                
+                new Chart(chartCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Revenue',
+                            data: [12500, 19200, 15000, 25400, 22000, 31000, 28500],
+                            borderColor: '#4285F4', // Gemini Blue
+                            backgroundColor: gradient,
+                            borderWidth: 3,
+                            pointBackgroundColor: '#FFFFFF',
+                            pointBorderColor: '#4285F4',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            fill: true,
+                            tension: 0.4 // Smooth bezier curves
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: '#21005D', // m3-onPrimaryContainer
+                                titleFont: { family: 'Inter', size: 13 },
+                                bodyFont: { family: 'Inter', size: 14, weight: 'bold' },
+                                padding: 12,
+                                cornerRadius: 12,
+                                displayColors: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        return '$' + context.parsed.y.toLocaleString();
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: '#ECE6F0', drawBorder: false }, // m3-surfaceContainerHigh
+                                ticks: {
+                                    font: { family: 'Inter', size: 12 },
+                                    color: '#79747E', // m3-outline
+                                    callback: function(value) { return '$' + value / 1000 + 'k'; }
+                                }
+                            },
+                            x: {
+                                grid: { display: false, drawBorder: false },
+                                ticks: { font: { family: 'Inter', size: 12 }, color: '#79747E' }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
