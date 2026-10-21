@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COREBIQ ERP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Google Sans"', 'Roboto', 'sans-serif'],
+                        roboto: ['Roboto', 'sans-serif'],
+                    },
+                    colors: {
+                        android: {
+                            navy: '#073042',
+                            green: '#3DDC84',
+                            blue: '#4285F4',
+                            light: '#F8F9FA',
+                            border: '#DADCE0',
+                            text: '#202124',
+                            textSecondary: '#5F6368',
+                            darkBg: '#121212',
+                            darkSurface: '#1E1E1E',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @font-face {
+            font-family: 'Google Sans';
+            font-style: normal;
+            font-weight: 400;
+            src: url(https://fonts.gstatic.com/s/googlesans/v29/4UaGrENHsxJlGDuGo1OIlL3Owp5eKQtG.woff2) format('woff2');
+        }
+        @font-face {
+            font-family: 'Google Sans';
+            font-style: normal;
+            font-weight: 500;
+            src: url(https://fonts.gstatic.com/s/googlesans/v29/4UabrENHsxJlGDuGo1OIlLU94YtzCwZhTg.woff2) format('woff2');
+        }
+        body {
+            background-color: #F8F9FA;
+            color: #202124;
+        }
+        .dark body {
+            background-color: #121212;
+            color: #E8EAED;
+        }
+        .nav-item {
+            transition: all 0.2s ease;
+        }
+        .nav-item:hover, .nav-item.active {
+            background-color: #E8F0FE;
+            color: #1967D2;
+            border-radius: 0 24px 24px 0;
+        }
+        .dark .nav-item:hover, .dark .nav-item.active {
+            background-color: rgba(66, 133, 244, 0.15);
+            color: #8AB4F8;
+        }
+        .nav-item.active .material-icons { color: #1967D2; }
+        .dark .nav-item.active .material-icons { color: #8AB4F8; }
+        
+        /* Mobile Nav Active */
+        .mobile-nav-item.active { color: #3DDC84; }
+        
+        .card {
+            background: white;
+            border: 1px solid #DADCE0;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+        }
+        .dark .card {
+            background: #1E1E1E;
+            border-color: #3C4043;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
+        }
+        .btn-primary {
+            background-color: #3DDC84;
+            color: #073042;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover { background-color: #34C977; }
+        
+        .input-field {
+            @apply mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-android-green focus:border-android-green sm:text-sm dark:bg-[#2D2D2D] dark:border-gray-600 dark:text-white;
+        }
+        
+        .table-header { @apply px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400; }
+        .table-cell { @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200; }
+        
+        #toast-container { z-index: 9999; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden antialiased">
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="fixed top-4 right-4 space-y-2 flex flex-col items-end"></div>
+
+    <!-- Sidebar (Desktop) -->
+    <aside class="w-64 bg-white dark:bg-android-darkSurface border-r border-android-border dark:border-gray-700 flex-col hidden md:flex z-10">
+        <div class="h-16 flex items-center px-6 border-b border-android-border dark:border-gray-700">
+            <span class="text-xl font-bold text-android-navy dark:text-white flex items-center gap-2">
+                <span class="material-icons text-android-green">android</span>
+                COREBIQ
+            </span>
+        </div>
+        <div class="flex-1 py-4 overflow-y-auto pr-4">
+            <nav class="space-y-1">
+                <a href="#" onclick="switchModule('dashboard')" class="nav-item active flex items-center gap-4 px-6 py-3 text-sm font-medium text-android-textSecondary dark:text-gray-300">
+                    <span class="material-icons">dashboard</span> Dashboard
+                </a>
+                <a href="#" onclick="switchModule('transactions')" class="nav-item flex items-center gap-4 px-6 py-3 text-sm font-medium text-android-textSecondary dark:text-gray-300">
+                    <span class="material-icons">receipt_long</span> Transactions
+                </a>
+                <a href="#" onclick="switchModule('ledgers')" class="nav-item flex items-center gap-4 px-6 py-3 text-sm font-medium text-android-textSecondary dark:text-gray-300">
+                    <span class="material-icons">account_balance_wallet</span> Ledgers
+                </a>
+                <a href="#" onclick="switchModule('inventory')" class="nav-item flex items-center gap-4 px-6 py-3 text-sm font-medium text-android-textSecondary dark:text-gray-300">
+                    <span class="material-icons">inventory_2</span> Inventory
+                </a>
+                <a href="#" onclick="switchModule('settings')" class="nav-item flex items-center gap-4 px-6 py-3 text-sm font-medium text-android-textSecondary dark:text-gray-300">
+                    <span class="material-icons">settings</span> Settings
+                </a>
+            </nav>
+        </div>
+        <div class="p-4 border-t border-android-border dark:border-gray-700 text-xs text-android-textSecondary dark:text-gray-400">
+            <span id="auth-status" class="text-amber-500 font-medium">Connecting...</span>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col h-screen overflow-hidden">
+        <!-- Header -->
+        <header class="h-16 bg-white dark:bg-android-darkSurface border-b border-android-border dark:border-gray-700 flex items-center justify-between px-4 sm:px-6 z-10 shadow-sm">
+            <h1 id="module-title" class="text-xl font-medium text-android-text dark:text-white">Dashboard</h1>
+            <div class="flex items-center gap-4">
+                <button onclick="toggleDarkMode()" class="p-2 text-android-textSecondary dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
+                    <span class="material-icons" id="theme-icon">dark_mode</span>
+                </button>
+                <div class="w-8 h-8 rounded-full bg-android-navy text-android-green flex items-center justify-center font-bold text-sm">
+                    CB
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content Area -->
+        <main class="flex-1 overflow-y-auto bg-android-light dark:bg-android-darkBg p-4 pb-24 sm:p-6 lg:p-8 relative">
+            
+            <!-- Dashboard Module -->
+            <div id="module-dashboard" class="module-view space-y-6">
+                <div class="card p-8 text-center">
+                    <span class="material-icons text-6xl text-android-green mb-4">account_balance</span>
+                    <h2 class="text-2xl font-bold mb-2">Welcome to COREBIQ ERP</h2>
+                    <p class="text-android-textSecondary dark:text-gray-400 mb-6">Manage your business seamlessly.</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                        <button onclick="switchModule('settings')" class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                            <span class="material-icons text-android-blue block mb-2">settings</span> Setup Company
+                        </button>
+                        <button onclick="switchModule('ledgers')" class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                            <span class="material-icons text-purple-500 block mb-2">group</span> Add Ledgers
+                        </button>
+                        <button onclick="switchModule('inventory')" class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                            <span class="material-icons text-amber-500 block mb-2">inventory</span> Add Inventory
+                        </button>
+                        <button onclick="switchModule('transactions')" class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                            <span class="material-icons text-android-green block mb-2">receipt</span> Record Txn
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Module -->
+            <div id="module-settings" class="module-view hidden max-w-3xl mx-auto">
+                <div class="card p-6">
+                    <h2 class="text-lg font-medium mb-4">Company Profile</h2>
+                    <form id="settings-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium dark:text-gray-300">Company Name</label>
+                            <input type="text" id="set-company" class="input-field" value="CM Experts Group" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium dark:text-gray-300">Location</label>
+                            <input type="text" id="set-location" class="input-field" value="Kerala, India" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium dark:text-gray-300">GSTIN</label>
+                            <input type="text" id="set-gstin" class="input-field" value="32XXXXX0000X1Z5" required>
+                        </div>
+                        <div class="pt-4">
+                            <button type="submit" class="btn-primary py-2 px-6 rounded-md shadow-sm">Save Settings</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Ledgers Module -->
+            <div id="module-ledgers" class="module-view hidden space-y-4">
+                <div class="flex justify-between items-center">
+                    <p class="text-android-textSecondary dark:text-gray-400">Manage accounts and parties.</p>
+                    <button onclick="openModal('ledger-modal')" class="btn-primary px-4 py-2 rounded text-sm flex items-center gap-2">
+                        <span class="material-icons text-sm">add</span> New Ledger
+                    </button>
+                </div>
+                <div class="card overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead class="bg-gray-50 dark:bg-gray-800">
+                            <tr>
+                                <th class="table-header">Name</th>
+                                <th class="table-header">Type</th>
+                                <th class="table-header text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ledgers-body" class="divide-y divide-gray-200 dark:divide-gray-700"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Inventory Module -->
+            <div id="module-inventory" class="module-view hidden space-y-4">
+                <div class="flex justify-between items-center">
+                    <p class="text-android-textSecondary dark:text-gray-400">Manage products and services.</p>
+                    <button onclick="openModal('inventory-modal')" class="btn-primary px-4 py-2 rounded text-sm flex items-center gap-2">
+                        <span class="material-icons text-sm">add</span> New Item
+                    </button>
+                </div>
+                <div class="card overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead class="bg-gray-50 dark:bg-gray-800">
+                            <tr>
+                                <th class="table-header">Item Name</th>
+                                <th class="table-header">Type</th>
+                                <th class="table-header">Price</th>
+                                <th class="table-header">Tax %</th>
+                                <th class="table-header text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-body" class="divide-y divide-gray-200 dark:divide-gray-700"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Transactions Module -->
+            <div id="module-transactions" class="module-view hidden space-y-4">
+                <div class="flex justify-between items-center">
+                    <p class="text-android-textSecondary dark:text-gray-400">Record Invoices and Receipts.</p>
+                    <button onclick="openTransactionModal()" class="btn-primary px-4 py-2 rounded text-sm flex items-center gap-2">
+                        <span class="material-icons text-sm">add</span> New Entry
+                    </button>
+                </div>
+                <div class="card overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead class="bg-gray-50 dark:bg-gray-800">
+                            <tr>
+                                <th class="table-header">Date</th>
+                                <th class="table-header">Type</th>
+                                <th class="table-header">Ledger</th>
+                                <th class="table-header">Total Amount</th>
+                                <th class="table-header text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-body" class="divide-y divide-gray-200 dark:divide-gray-700"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="md:hidden fixed bottom-0 w-full bg-white dark:bg-android-darkSurface border-t border-gray-200 dark:border-gray-700 flex justify-around py-2 z-20 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+        <button onclick="switchModule('dashboard')" class="mobile-nav-item active flex flex-col items-center p-2 text-gray-500 dark:text-gray-400" data-target="dashboard">
+            <span class="material-icons">dashboard</span><span class="text-[10px]">Home</span>
+        </button>
+        <button onclick="switchModule('transactions')" class="mobile-nav-item flex flex-col items-center p-2 text-gray-500 dark:text-gray-400" data-target="transactions">
+            <span class="material-icons">receipt_long</span><span class="text-[10px]">Txns</span>
+        </button>
+        <button onclick="switchModule('ledgers')" class="mobile-nav-item flex flex-col items-center p-2 text-gray-500 dark:text-gray-400" data-target="ledgers">
+            <span class="material-icons">account_balance_wallet</span><span class="text-[10px]">Ledgers</span>
+        </button>
+        <button onclick="switchModule('inventory')" class="mobile-nav-item flex flex-col items-center p-2 text-gray-500 dark:text-gray-400" data-target="inventory">
+            <span class="material-icons">inventory_2</span><span class="text-[10px]">Items</span>
+        </button>
+    </nav>
+
+    <!-- MODALS -->
+    <!-- Ledger Modal -->
+    <div id="ledger-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-android-darkSurface rounded-lg w-full max-w-md p-6">
+            <h3 class="text-lg font-medium mb-4 dark:text-white">Add Ledger</h3>
+            <form id="ledger-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium dark:text-gray-300">Ledger Name</label>
+                    <input type="text" id="led-name" required class="input-field">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium dark:text-gray-300">Type</label>
+                    <select id="led-type" class="input-field">
+                        <option value="Sundry Debtor">Sundry Debtor (Customer)</option>
+                        <option value="Sundry Creditor">Sundry Creditor (Supplier)</option>
+                        <option value="Bank/Cash">Bank/Cash Account</option>
+                        <option value="Income">Income Account</option>
+                        <option value="Expense">Expense Account</option>
+                    </select>
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="closeModal('ledger-modal')" class="px-4 py-2 border rounded text-gray-600 dark:text-gray-300">Cancel</button>
+                    <button type="submit" class="btn-primary px-4 py-2 rounded">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Inventory Modal -->
+    <div id="inventory-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-android-darkSurface rounded-lg w-full max-w-md p-6">
+            <h3 class="text-lg font-medium mb-4 dark:text-white">Add Item</h3>
+            <form id="inventory-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium dark:text-gray-300">Item Name</label>
+                    <input type="text" id="inv-name" required class="input-field">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium dark:text-gray-300">Type</label>
+                    <select id="inv-type" class="input-field">
+                        <option value="Service">Service</option>
+                        <option value="Product">Product</option>
+                    </select>
+                </div>
+                <div class="flex gap-4">
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium dark:text-gray-300">Base Price</label>
+                        <input type="number" id="inv-price" required min="0" step="0.01" class="input-field">
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium dark:text-gray-300">Tax Rate (%)</label>
+                        <input type="number" id="inv-tax" required min="0" max="100" class="input-field" value="18">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="closeModal('inventory-modal')" class="px-4 py-2 border rounded text-gray-600 dark:text-gray-300">Cancel</button>
+                    <button type="submit" class="btn-primary px-4 py-2 rounded">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Transaction Modal -->
+    <div id="transaction-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-android-darkSurface rounded-lg w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+            <h3 class="text-lg font-medium mb-4 dark:text-white">Record Transaction</h3>
+            <form id="transaction-form" class="space-y-4">
+                <div class="flex gap-4">
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium dark:text-gray-300">Type</label>
+                        <select id="txn-type" class="input-field">
+                            <option value="Invoice">Sales Invoice</option>
+                            <option value="Receipt">Receipt (Payment In)</option>
+                            <option value="Purchase">Purchase Bill</option>
+                            <option value="Payment">Payment Out</option>
+                        </select>
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium dark:text-gray-300">Date</label>
+                        <input type="date" id="txn-date" required class="input-field">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium dark:text-gray-300">Party Ledger</label>
+                    <select id="txn-ledger" required class="input-field">
+                        <option value="">Select a Ledger...</option>
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+                
+                <div class="border-t border-b border-gray-200 dark:border-gray-700 py-4 my-4">
+                    <label class="block text-sm font-medium dark:text-gray-300 mb-2">Item Details</label>
+                    <div>
+                        <select id="txn-item" class="input-field mb-2">
+                            <option value="">Select Item/Service...</option>
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="number" id="txn-qty" placeholder="Qty" min="1" value="1" class="input-field w-1/3">
+                        <input type="number" id="txn-price" placeholder="Price" step="0.01" class="input-field w-2/3" readonly>
+                    </div>
+                    <button type="button" onclick="calculateTxnTotal()" class="mt-2 text-sm text-android-blue">Calculate Total</button>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium dark:text-gray-300">Total Amount (Incl. Tax)</label>
+                    <input type="number" id="txn-total" required step="0.01" class="input-field font-bold text-lg" placeholder="0.00">
+                </div>
+
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="closeModal('transaction-modal')" class="px-4 py-2 border rounded text-gray-600 dark:text-gray-300">Cancel</button>
+                    <button type="submit" class="btn-primary px-4 py-2 rounded">Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase Script & App Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, setDoc, onSnapshot, doc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Environment Variables
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'corebiq-erp';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        
+        let app, auth, db, currentUser = null;
+        
+        // Local state for dropdowns
+        let ledgersList = [];
+        let inventoryList = [];
+        let unsubscribes = [];
+
+        // Global function bindings
+        window.switchModule = switchModule;
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+        window.openTransactionModal = openTransactionModal;
+        window.calculateTxnTotal = calculateTxnTotal;
+        window.deleteDocument = deleteDocument;
+        window.toggleDarkMode = toggleDarkMode;
+        window.showToast = showToast;
+
+        // Initialize App
+        init();
+
+        async function init() {
+            // Set today's date in txn form
+            document.getElementById('txn-date').valueAsDate = new Date();
+            
+            // Theme setup
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-icon').textContent = 'light_mode';
+            }
+
+            if (Object.keys(firebaseConfig).length > 0) {
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                await authenticateUser();
+            } else {
+                document.getElementById('auth-status').textContent = 'UI Preview Mode';
+                showToast("Running without database connection", "warning");
+            }
+        }
+
+        async function authenticateUser() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined') {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        currentUser = user;
+                        document.getElementById('auth-status').textContent = 'Connected';
+                        document.getElementById('auth-status').className = 'text-android-green font-medium';
+                        loadAllData();
+                    }
+                });
+            } catch (error) {
+                document.getElementById('auth-status').textContent = 'Auth Failed';
+                showToast("Authentication failed", "error");
+            }
+        }
+
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.theme = isDark ? 'dark' : 'light';
+            document.getElementById('theme-icon').textContent = isDark ? 'light_mode' : 'dark_mode';
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bg = type === 'success' ? 'bg-android-green text-android-navy' : (type === 'error' ? 'bg-red-500 text-white' : 'bg-amber-500 text-white');
+            toast.className = `${bg} px-4 py-2 rounded shadow-lg transition-opacity duration-300 opacity-0 transform translate-y-2`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            
+            setTimeout(() => { toast.classList.remove('opacity-0', 'translate-y-2'); }, 10);
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // --- UI Logic ---
+        function switchModule(moduleId) {
+            // Update Desktop Nav
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const desktopNav = document.querySelector(`.nav-item[onclick*="${moduleId}"]`);
+            if (desktopNav) desktopNav.classList.add('active');
+
+            // Update Mobile Nav
+            document.querySelectorAll('.mobile-nav-item').forEach(el => el.classList.remove('active'));
+            const mobileNav = document.querySelector(`.mobile-nav-item[data-target="${moduleId}"]`);
+            if (mobileNav) mobileNav.classList.add('active');
+            
+            // Toggle Views
+            document.querySelectorAll('.module-view').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`module-${moduleId}`).classList.remove('hidden');
+
+            const titles = { 'dashboard': 'Dashboard', 'settings': 'Company Settings', 'ledgers': 'Ledgers & Accounts', 'inventory': 'Inventory', 'transactions': 'Transactions' };
+            document.getElementById('module-title').textContent = titles[moduleId] || 'Module';
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); document.getElementById(id).classList.add('flex'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); }
+
+        // --- Data Loading & Listening ---
+        function loadAllData() {
+            if (!currentUser || !db) return;
+            // Clear old listeners if any
+            unsubscribes.forEach(unsub => unsub());
+            unsubscribes = [];
+
+            // 1. Settings
+            const settingsRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'settings', 'profile');
+            getDoc(settingsRef).then(docSnap => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('set-company').value = data.companyName;
+                    document.getElementById('set-location').value = data.location;
+                    document.getElementById('set-gstin').value = data.gstin;
+                }
+            });
+
+            // 2. Ledgers
+            const ledgersRef = collection(db, 'artifacts', appId, 'users', currentUser.uid, 'ledgers');
+            unsubscribes.push(onSnapshot(ledgersRef, (snap) => {
+                ledgersList = [];
+                const tbody = document.getElementById('ledgers-body');
+                tbody.innerHTML = '';
+                if(snap.empty) {
+                    tbody.innerHTML = '<tr><td colspan="3" class="table-cell text-center text-gray-500">No ledgers found.</td></tr>';
+                } else {
+                    snap.forEach(doc => {
+                        const data = {id: doc.id, ...doc.data()};
+                        ledgersList.push(data);
+                        tbody.innerHTML += `
+                            <tr>
+                                <td class="table-cell font-medium">${data.name}</td>
+                                <td class="table-cell"><span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">${data.type}</span></td>
+                                <td class="table-cell text-right"><button onclick="deleteDocument('ledgers', '${data.id}')" class="text-red-500 hover:text-red-700">Delete</button></td>
+                            </tr>`;
+                    });
+                }
+            }, err => console.error(err)));
+
+            // 3. Inventory
+            const invRef = collection(db, 'artifacts', appId, 'users', currentUser.uid, 'inventory');
+            unsubscribes.push(onSnapshot(invRef, (snap) => {
+                inventoryList = [];
+                const tbody = document.getElementById('inventory-body');
+                tbody.innerHTML = '';
+                if(snap.empty) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="table-cell text-center text-gray-500">No items found.</td></tr>';
+                } else {
+                    snap.forEach(doc => {
+                        const data = {id: doc.id, ...doc.data()};
+                        inventoryList.push(data);
+                        tbody.innerHTML += `
+                            <tr>
+                                <td class="table-cell font-medium">${data.name}</td>
+                                <td class="table-cell">${data.type}</td>
+                                <td class="table-cell">₹${data.price.toFixed(2)}</td>
+                                <td class="table-cell">${data.taxRate}%</td>
+                                <td class="table-cell text-right"><button onclick="deleteDocument('inventory', '${data.id}')" class="text-red-500 hover:text-red-700">Delete</button></td>
+                            </tr>`;
+                    });
+                }
+            }));
+
+            // 4. Transactions
+            const txnRef = collection(db, 'artifacts', appId, 'users', currentUser.uid, 'transactions');
+            unsubscribes.push(onSnapshot(txnRef, (snap) => {
+                const txns = [];
+                snap.forEach(doc => txns.push({id: doc.id, ...doc.data()}));
+                txns.sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort memory
+                
+                const tbody = document.getElementById('transactions-body');
+                tbody.innerHTML = '';
+                if(txns.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="table-cell text-center text-gray-500">No transactions recorded.</td></tr>';
+                } else {
+                    txns.forEach(txn => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td class="table-cell">${txn.date}</td>
+                                <td class="table-cell font-medium">${txn.type}</td>
+                                <td class="table-cell">${txn.ledgerName}</td>
+                                <td class="table-cell font-bold">₹${txn.total.toFixed(2)}</td>
+                                <td class="table-cell text-right"><button onclick="deleteDocument('transactions', '${txn.id}')" class="text-red-500 hover:text-red-700">Delete</button></td>
+                            </tr>`;
+                    });
+                }
+            }));
+        }
+
+        // --- CRUD Actions ---
+        
+        // Save Settings
+        document.getElementById('settings-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser) return showToast("Not authenticated", "error");
+            try {
+                const ref = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'settings', 'profile');
+                await setDoc(ref, {
+                    companyName: document.getElementById('set-company').value,
+                    location: document.getElementById('set-location').value,
+                    gstin: document.getElementById('set-gstin').value,
+                    updatedAt: new Date().toISOString()
+                });
+                showToast("Settings saved successfully");
+            } catch (err) { showToast("Error saving settings", "error"); }
+        });
+
+        // Add Ledger
+        document.getElementById('ledger-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+            try {
+                const ref = collection(db, 'artifacts', appId, 'users', currentUser.uid, 'ledgers');
+                await addDoc(ref, {
+                    name: document.getElementById('led-name').value,
+                    type: document.getElementById('led-type').value,
+                    createdAt: new Date().toISOString()
+                });
+                closeModal('ledger-modal');
+                document.getElementById('ledger-form').reset();
+                showToast("Ledger added");
+            } catch (err) { showToast("Error adding ledger", "error"); }
+        });
+
+        // Add Inventory
+        document.getElementById('inventory-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+            try {
+                const ref = collection(db, 'artifacts', appId, 'users', currentUser.uid, 'inventory');
+                await addDoc(ref, {
+                    name: document.getElementById('inv-name').value,
+                    type: document.getElementById('inv-type').value,
+                    price: parseFloat(document.getElementById('inv-price').value),
+                    taxRate: parseFloat(document.getElementById('inv-tax').value),
+                    createdAt: new Date().toISOString()
+                });
+                closeModal('inventory-modal');
+                document.getElementById('inventory-form').reset();
+                showToast("Item added");
+            } catch (err) { showToast("Error adding item", "error"); }
+        });
+
+        // Transaction Logic
+        function openTransactionModal() {
+            // Populate Ledgers
+            const ledSelect = document.getElementById('txn-ledger');
+            ledSelect.innerHTML = '<option value="">Select a Ledger...</option>';
+            ledgersList.forEach(l => { ledSelect.innerHTML += `<option value="${l.id}">${l.name} (${l.type})</option>`; });
+            
+            // Populate Items
+            const itemSelect = document.getElementById('txn-item');
+            itemSelect.innerHTML = '<option value="">Select Item/Service...</option>';
+            inventoryList.forEach(i => { itemSelect.innerHTML += `<option value="${i.id}">${i.name} - ₹${i.price}</option>`; });
+            
+            document.getElementById('txn-total').value = '';
+            document.getElementById('txn-qty').value = '1';
+            document.getElementById('txn-price').value = '';
+            openModal('transaction-modal');
+        }
+
+        // Auto-fill price when item selected
+        document.getElementById('txn-item').addEventListener('change', (e) => {
+            const itemId = e.target.value;
+            const item = inventoryList.find(i => i.id === itemId);
+            if(item) {
+                document.getElementById('txn-price').value = item.price;
+                calculateTxnTotal();
+            } else {
+                document.getElementById('txn-price').value = '';
+            }
+        });
+
+        document.getElementById('txn-qty').addEventListener('input', calculateTxnTotal);
+
+        function calculateTxnTotal() {
+            const itemId = document.getElementById('txn-item').value;
+            const qty = parseFloat(document.getElementById('txn-qty').value) || 1;
+            const item = inventoryList.find(i => i.id === itemId);
+            
+            if(item) {
+                const baseTotal = item.price * qty;
+                const taxAmount = baseTotal * (item.taxRate / 100);
+                document.getElementById('txn-total').value = (baseTotal + taxAmount).toFixed(2);
+            }
+        }
+
+        // Save Transaction
+        document.getElementById('transaction-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+            
+            const ledgerId = document.getElementById('txn-ledger').value;
+            const ledger = ledgersList.find(l => l.id === ledgerId);
+            
+            try {
+                const ref = collection(db, 'artifacts', appId, 'users', currentUser.uid, 'transactions');
+                await addDoc(ref, {
+                    type: document.getElementById('txn-type').value,
+                    date: document.getElementById('txn-date').value,
+                    ledgerId: ledgerId,
+                    ledgerName: ledger ? ledger.name : 'Unknown',
+                    itemId: document.getElementById('txn-item').value,
+                    qty: parseFloat(document.getElementById('txn-qty').value) || 1,
+                    total: parseFloat(document.getElementById('txn-total').value),
+                    createdAt: new Date().toISOString()
+                });
+                closeModal('transaction-modal');
+                document.getElementById('transaction-form').reset();
+                document.getElementById('txn-date').valueAsDate = new Date();
+                showToast("Transaction recorded");
+            } catch (err) { showToast("Error recording transaction", "error"); }
+        });
+
+        // Generic Delete
+        async function deleteDocument(collectionName, docId) {
+            if (!currentUser || !db) return;
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, collectionName, docId);
+                await deleteDoc(docRef);
+                showToast("Record deleted");
+            } catch (error) {
+                showToast("Error deleting record", "error");
+            }
+        }
+    </script>
+</body>
+</html>
