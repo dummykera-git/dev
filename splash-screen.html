@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="description" content="COREBIQ — Intelligent Business Management">
+<title>COREBIQ · Loading...</title>
+
+<!-- Fonts: Google Sans via reliable CDN for exact typography match -->
+<link href="https://fonts.cdnfonts.com/css/product-sans" rel="stylesheet">
+<!-- Fallback -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================================
+   COREBIQ · Gemini AI Style Standalone Splash Screen
+   ========================================================================== */
+:root {
+  --bg: #FFFFFF; 
+  --text: #1F1F1F; 
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body { 
+  margin: 0; 
+  background: var(--bg); 
+  color: var(--text); 
+  font-family: 'Product Sans', 'Inter', sans-serif; 
+  -webkit-font-smoothing: antialiased; 
+  overflow: hidden; /* Prevent scrolling during splash */
+  height: 100vh;
+  width: 100vw;
+}
+
+.splash-screen { 
+  position: fixed; 
+  inset: 0; 
+  background: var(--bg); 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  z-index: 99999; 
+  transition: opacity 0.4s ease, visibility 0.4s; 
+}
+
+.splash-screen.fade-out { 
+  opacity: 0; 
+  visibility: hidden; 
+}
+
+.splash-pyramid { 
+  position: relative; 
+  width: 40px; 
+  height: 34px; 
+  animation: pyramid-spin 2s infinite cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+  margin-bottom: 24px; 
+}
+
+.splash-dot { 
+  position: absolute; 
+  width: 12px; 
+  height: 12px; 
+  border-radius: 50%; 
+}
+
+/* Gemini Signature Colors */
+.splash-dot:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); background: #4285F4; }
+.splash-dot:nth-child(2) { bottom: 0; left: 0; background: #D96570; }
+.splash-dot:nth-child(3) { bottom: 0; right: 0; background: #9B72CB; }
+
+@keyframes pyramid-spin {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.brand-text {
+  font-weight: 600; 
+  color: var(--text); 
+  margin: 0; 
+  letter-spacing: -0.5px;
+  font-size: 24px;
+}
+</style>
+</head>
+<body>
+
+<div class="splash-screen" id="splashScreen">
+  <div class="splash-pyramid">
+    <div class="splash-dot"></div>
+    <div class="splash-dot"></div>
+    <div class="splash-dot"></div>
+  </div>
+  <h2 class="brand-text">COREBIQ</h2>
+</div>
+
+<script>
+// Logic to handle the splash screen duration and transition
+window.addEventListener('load', () => {
+  
+  // Set how long the splash screen should show (e.g., 2000ms = 2 seconds)
+  const splashDuration = 2000;
+
+  setTimeout(() => {
+    // 1. Fade out the splash screen visually
+    document.getElementById('splashScreen').classList.add('fade-out');
+    
+    // 2. Redirect to your main dashboard page after the fade transition completes (400ms)
+    setTimeout(() => {
+      window.location.href = 'dashboard.html'; // Update this to match your actual main file name
+    }, 400);
+
+  }, splashDuration); 
+});
+</script>
+
+</body>
+</html>
