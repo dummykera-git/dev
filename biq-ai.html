@@ -264,6 +264,78 @@
             .icon-btn { width: 40px; height: 40px; }
             .icon-btn .material-symbols-rounded { font-size: 22px; }
         }
+
+/* COREBIQ SPA iframe compatibility patch.
+   Append this block at the END of the existing <style> in biq-ai.html. */
+html, body {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+/* Let the chat transcript take remaining iframe height and scroll internally. */
+.chat-container {
+    flex: 1 1 0;
+    min-height: 0;
+    height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 12px;
+}
+
+/* Keep suggestions and composer visible inside the iframe. */
+.bottom-area {
+    flex: 0 0 auto;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+    background: var(--md-sys-color-surface);
+}
+
+/* Avoid a focus transform lifting the composer into the transcript. */
+.input-glow-wrapper:focus-within {
+    transform: none;
+}
+
+/* Make chat bubbles fit narrow phones without horizontal overflow. */
+.message-wrapper {
+    min-width: 0;
+}
+.bubble {
+    overflow-wrap: anywhere;
+}
+.data-card {
+    max-width: 100%;
+}
+
+/* In the iframe, use the parent's available viewport instead of 100dvh. */
+@media (max-width: 767px) {
+    .chat-container {
+        padding: 12px 12px 8px;
+        gap: 16px;
+    }
+    .message-wrapper {
+        max-width: 92%;
+    }
+    .bubble {
+        padding: 14px 16px;
+        font-size: 15px;
+    }
+    .bottom-area {
+        padding: 6px 10px max(8px, env(safe-area-inset-bottom));
+        gap: 8px;
+    }
+    .suggestions-wrapper {
+        max-width: 100%;
+    }
+}
+
     </style>
 </head>
 <body>
