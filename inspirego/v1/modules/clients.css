@@ -1,0 +1,22 @@
+.clients-crud-page .crud-toolbar{grid-template-columns:minmax(180px,1fr) auto}
+.clients-crud-page .table-wrap{overflow-x:auto}
+.clients-crud-page .data-table{min-width:900px;table-layout:fixed}
+.clients-crud-page .data-table th:nth-child(1){width:12%}
+.clients-crud-page .data-table th:nth-child(2){width:19%}
+.clients-crud-page .data-table th:nth-child(3){width:20%}
+.clients-crud-page .data-table th:nth-child(4){width:13%}
+.clients-crud-page .data-table th:nth-child(5),.clients-crud-page .data-table th:nth-child(6){width:14%;text-align:right}
+.clients-crud-page .data-table th:nth-child(7){width:8%}
+.clients-crud-page .data-table th:nth-child(8){width:6%;text-align:center}
+.clients-crud-page .data-table td{overflow:hidden;text-overflow:ellipsis}
+.client-name,.client-contact-person{display:block;overflow:hidden;text-overflow:ellipsis}
+.client-name{color:#20232B;font-weight:600}
+.client-contact-person{margin-top:3px;color:#667085;font-size:11px}
+.client-balance{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.client-balance.is-credit{color:#137333}
+.client-status{display:inline-flex;align-items:center;padding:4px 9px;border-radius:999px;background:#F2F4F7;color:#667085;font-size:11px;font-weight:600}
+.client-status.is-active{background:#E6F4EA;color:#137333}
+.clients-crud-page .crud-field-help{display:block;color:#667085;font-size:11px;line-height:1.45}
+.clients-crud-page .crud-form-section h3{color:#344054}
+.clients-crud-page .crud-dialog .form-group:has(#openingBalance){grid-column:span 2}
+@media(max-width:560px){.clients-crud-page .crud-dialog .form-group:has(#openingBalance){grid-column:1/-1}}

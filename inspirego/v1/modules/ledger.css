@@ -1,0 +1,23 @@
+.ledger-crud-page .table-wrap{overflow:auto}
+.ledger-crud-page .data-table{min-width:900px}
+.ledger-crud-page .data-table th:last-child,
+.ledger-crud-page .data-table td:last-child{text-align:center;width:74px}
+.ledger-crud-page .data-table td:nth-child(1),
+.ledger-crud-page .data-table td:nth-child(5),
+.ledger-crud-page .data-table td:nth-child(6){white-space:nowrap}
+.ledger-view-button{width:36px;height:36px;margin:auto;color:var(--primary)}
+.ledger-view-button .material-symbols-rounded{font-size:19px}
+.ledger-head-badge{display:inline-flex;align-items:center;padding:4px 9px;border-radius:999px;background:var(--primary-soft);color:var(--primary);font-size:12px;font-weight:600}
+.ledger-balance{font-weight:600;font-variant-numeric:tabular-nums}
+.ledger-balance-type{display:inline-flex;min-width:34px;justify-content:center;padding:4px 7px;border:1px solid var(--outline-soft);border-radius:7px;background:#f8fafc;font-size:11px;font-weight:700}
+.ledger-details-dialog{width:min(680px,calc(100% - 28px));max-height:min(85vh,760px);overflow:auto;padding:20px;border:1px solid var(--outline-soft);border-radius:16px;background:#fff;box-shadow:0 16px 48px rgba(31,35,40,.22)}
+.ledger-details-dialog::backdrop{background:rgba(22,31,43,.42);backdrop-filter:blur(2px)}
+.ledger-details-dialog .crud-dialog-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.ledger-details-dialog .crud-dialog-header h2{margin:0;font-size:20px}
+.ledger-details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;padding:1px;border:1px solid var(--outline-soft);border-radius:12px;background:var(--outline-soft);overflow:hidden}
+.ledger-detail-item{min-width:0;display:grid;align-content:start;gap:5px;padding:12px;background:#fff}
+.ledger-detail-item span{color:var(--muted);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.ledger-detail-item strong{overflow-wrap:anywhere;font-size:14px;font-weight:500}
+.ledger-details-dialog .form-actions{flex-wrap:wrap;padding:16px 0 0;border-top:0}
+.ledger-details-dialog .form-actions .btn{flex:1 1 auto}
+@media(max-width:520px){.ledger-details-dialog{padding:15px}.ledger-details-grid{grid-template-columns:1fr}.ledger-details-dialog .form-actions{gap:7px}.ledger-details-dialog .form-actions .btn{font-size:12px;padding-inline:9px}}

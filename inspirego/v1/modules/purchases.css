@@ -1,0 +1,13 @@
+.purchases-crud-page .data-table th,
+.purchases-crud-page .data-table td{white-space:nowrap}
+
+@media(max-width:760px){
+  .purchases-crud-page .data-table th,
+  .purchases-crud-page .data-table td{padding:8px 5px;font-size:10px}
+  .purchases-crud-page .data-table th:nth-child(1){width:16%}
+  .purchases-crud-page .data-table th:nth-child(2){width:15%}
+  .purchases-crud-page .data-table th:nth-child(3){width:20%}
+  .purchases-crud-page .data-table th:nth-child(4){width:23%}
+  .purchases-crud-page .data-table th:nth-child(5){width:16%}
+  .purchases-crud-page .data-table th:nth-child(6){width:10%}
+}

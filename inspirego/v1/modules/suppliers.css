@@ -1,0 +1,13 @@
+.suppliers-crud-page .data-table th,
+.suppliers-crud-page .data-table td{white-space:nowrap}
+
+@media(max-width:760px){
+  .suppliers-crud-page .data-table th,
+  .suppliers-crud-page .data-table td{padding:8px 5px;font-size:10px}
+  .suppliers-crud-page .data-table th:nth-child(1){width:15%}
+  .suppliers-crud-page .data-table th:nth-child(2){width:19%}
+  .suppliers-crud-page .data-table th:nth-child(3){width:14%}
+  .suppliers-crud-page .data-table th:nth-child(4){width:12%}
+  .suppliers-crud-page .data-table th:nth-child(5),
+  .suppliers-crud-page .data-table th:nth-child(6){width:13%}
+}
